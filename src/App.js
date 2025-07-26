@@ -1,11 +1,33 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import ProductListPage from "./pages/ProductListPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 import CartPage from "./pages/CartPage";
+import SellerDashboardPage from "./pages/SellerDashboardPage";
 
+const ProtectedRoute = ({ children, requiredRole = null }) => {
+  const authToken = localStorage.getItem('authToken');
+  // In a real application, you would decode the JWT to get user role
+  // For now, let's assume you store userRole in localStorage after login
+  // Example: localStorage.setItem('userRole', 'seller'); or 'customer'
+  const userRole = localStorage.getItem('userRole'); // Get user role from localStorage
+
+  if (!authToken) {
+    // If not authenticated, redirect to login
+    return <Navigate to="/login" replace />;
+  }
+
+  // If a specific role is required and the user doesn't have it
+  if (requiredRole && userRole !== requiredRole) {
+    // Optionally redirect to a "Forbidden" page or home
+    alert(`Access Denied: You need '${requiredRole}' role to view this page.`);
+    return <Navigate to="/" replace />; // Redirect to home page
+  }
+
+  return children;
+};
 
 function App() {
   return (
@@ -19,7 +41,25 @@ function App() {
           <Route path="/products/:id" element={<ProductDetailsPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/customer/cart" element={<CartPage/>} />
+          <Route
+            path="/customer/cart"
+            element={
+              <ProtectedRoute requiredRole="customer"> {/* Example: Requires 'customer' role */}
+                <CartPage />
+              </ProtectedRoute>
+            }
+          />
+          {/* Add more customer routes here: /customer/orders etc. */}
+
+          {/* Protected Seller Routes */}
+          <Route
+            path="/seller/dashboard"
+            element={
+              <ProtectedRoute requiredRole="seller"> {/* Requires 'seller' role */}
+                <SellerDashboardPage />
+              </ProtectedRoute>
+            }
+          />
           {/* Catch-all for undefined routes (optional) */}
           <Route path="*" element={<h1 className="text-center text-3xl mt-10">404 - Page Not Found</h1>} />
         </Routes>

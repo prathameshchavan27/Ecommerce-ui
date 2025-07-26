@@ -17,6 +17,7 @@ const ProductDetailsPage = () => {
         setLoading(true);
         setError(null);
         const data = await productsService.getPublicProductById(id);
+        console.log(data)
         setProduct(data);
         // Ensure quantity doesn't exceed available stock
         if (data.stock === 0) {
