@@ -8,6 +8,7 @@ const authService = {
     if (response.data && response.data.token) {
       localStorage.setItem('authToken', response.data.token);
       localStorage.setItem('user',JSON.stringify(response.data.user))
+      localStorage.setItem('userRole',response.data.user.role)
     }
     return response.data;
   },

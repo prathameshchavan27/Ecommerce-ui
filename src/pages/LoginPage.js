@@ -1,11 +1,11 @@
 // src/pages/LoginPage.jsx
-import React, { useState } from 'react';
-import authService from '../api/auth'; // Import auth service
-import { useNavigate } from 'react-router-dom'; // If using React Router
+import React, { useState } from "react";
+import authService from "../api/auth"; // Import auth service
+import { useNavigate } from "react-router-dom"; // If using React Router
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -16,12 +16,17 @@ const LoginPage = () => {
     setError(null);
     try {
       const response = await authService.login({ user: { email, password } }); // Adjust payload to match Rails Devise JSON
-      console.log('Login successful:', response);
+      console.log("Login successful:", {response});
       // alert('Login successful!');
-      navigate('/products'); // Redirect after login
+      if (response.user.role === "seller") {
+        navigate("/seller/dashboard");
+      } else if (response.user.role === "customer") {
+        navigate("/products"); // Or '/customer/dashboard'
+      }
+        // Redirect after login
     } catch (err) {
-      setError('Login failed. Please check your credentials.');
-      console.error('Login error:', err);
+      setError("Login failed. Please check your credentials.");
+      console.error("Login error:", err);
     } finally {
       setLoading(false);
     }
@@ -29,11 +34,17 @@ const LoginPage = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md w-96">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-8 rounded-lg shadow-md w-96"
+      >
         <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="email"
+          >
             Email
           </label>
           <input
@@ -46,7 +57,10 @@ const LoginPage = () => {
           />
         </div>
         <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="password"
+          >
             Password
           </label>
           <input
@@ -64,7 +78,7 @@ const LoginPage = () => {
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
             disabled={loading}
           >
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? "Logging in..." : "Login"}
           </button>
         </div>
       </form>
