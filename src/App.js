@@ -6,6 +6,7 @@ import RegisterPage from "./pages/RegisterPage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 import CartPage from "./pages/CartPage";
 import SellerDashboardPage from "./pages/SellerDashboardPage";
+import AdminDashboardPage from "./pages/Admin/AdminDashboardPage";
 
 const ProtectedRoute = ({ children, requiredRole = null }) => {
   const authToken = localStorage.getItem('authToken');
@@ -57,6 +58,15 @@ function App() {
             element={
               <ProtectedRoute requiredRole="seller"> {/* Requires 'seller' role */}
                 <SellerDashboardPage />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <AdminDashboardPage />
               </ProtectedRoute>
             }
           />

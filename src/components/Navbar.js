@@ -29,7 +29,7 @@ const Navbar = () => {
               <Link to="/customer/cart" className="text-gray-300 hover:text-white">
                 Cart
               </Link>
-                <Link to="/admin/categories" className="text-gray-300 hover:text-white">
+                <Link to="/admin/dashboard" className="text-gray-300 hover:text-white">
                     Admin
                 </Link>: ''
               <button
