@@ -19,9 +19,16 @@ const CartPage = () => {
   // --- Handlers for Quantity Change and Removal ---
     useEffect(()=>{
         const getCart = async () => {
+          try {
             const response = await cartService.getCart();
             setCart(response);
             setTotal(parseFloat(response.total_price))
+            setLoading(false);
+          } catch (error) {
+            console.error('Error fetching cart:', error);
+            setError('Failed to load cart. Please try again later.');
+            setLoading(false);
+          }
         }
         getCart();
     },[loading]); 

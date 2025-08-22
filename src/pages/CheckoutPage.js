@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements, useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
+import {  useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import cartService from '../api/cart';
 import { useNavigate } from 'react-router-dom';
 

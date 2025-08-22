@@ -227,11 +227,6 @@ const RegisterPage = () => {
         navigate('/');
       }, 2000);
     } catch (err) {
-      const errorMessage =
-        err.response?.data?.message ||
-        err.message ||
-        'An unexpected error occurred.';
-      // setError(errorMessage);
       console.error('Registration error:', err);
     } finally {
       setLoading(false);

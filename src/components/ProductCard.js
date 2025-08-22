@@ -1,5 +1,4 @@
 import React from 'react'
-import productsService from '../api/product'
 import { useNavigate } from 'react-router-dom'
 
 export default function ProductCard({ id, title, description, price, stock, category }) {
