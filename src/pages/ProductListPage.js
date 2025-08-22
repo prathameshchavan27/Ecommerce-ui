@@ -7,9 +7,14 @@ export default function ProductListPage() {
 
     useEffect(()=>{
         const fetchProducts = async () => {
+          try {            
             const response = await productsService.getPublicProducts();
             console.log(response.products)
             setProducts(response.products);
+          } catch (error) {
+            console.error('Error fetching products:', error);
+           // setError('Failed to load products. Please try again later.');
+          }
         }
         fetchProducts();
     },[])

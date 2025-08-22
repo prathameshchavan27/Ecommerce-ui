@@ -26,7 +26,16 @@ const cartService = {
   deleteCartItem: async (id) => {
     const response = await api.delete(`/customer/cart_items/${id}`);
     return response.data;
-  }
+  },
+  cartCheckout: async (paymentToken) => {
+    const response = await api.post('/customer/orders', { payment_token: paymentToken });
+    console.log(response.data);
+    return response.data;
+  },
+  directCheckout: async (orderInfo) => {
+    const response = await api.post('/customer/orders/direct_checkout', orderInfo);
+    return response.data;
+  },
 };
 
 export default cartService;

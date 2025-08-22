@@ -1,6 +1,6 @@
 // src/pages/CartPage.jsx
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import cartService from '../api/cart';
 
 const CartPage = () => {
@@ -14,7 +14,7 @@ const CartPage = () => {
   const [error, setError] = useState(null); // For future API errors
     const [total, setTotal] = useState(0);
   // Calculate subtotal whenever cartItems change
-  
+  const navigate = useNavigate();
 
   // --- Handlers for Quantity Change and Removal ---
     useEffect(()=>{
@@ -24,7 +24,7 @@ const CartPage = () => {
             setTotal(parseFloat(response.total_price))
         }
         getCart();
-    },)
+    },[loading]); 
 
 //   const handleQuantityChange = (itemId, newQuantity) => {
 //     setCartItems((prevItems) =>
@@ -61,9 +61,10 @@ const CartPage = () => {
       alert("Your cart is empty. Please add items before checking out.");
       return;
     }
+    const order = cartService.cartCheckout()
     console.log("Proceeding to checkout with items:", cart?.items);
-    alert("Proceeding to checkout! (This is a placeholder)");
-    // navigate('/checkout'); // Example navigation
+    alert(`Proceeding to checkout! ${order}`);
+    navigate('/checkout'); // Example navigation
   };
 
   // --- Display Loading/Error states (for future API integration) ---
