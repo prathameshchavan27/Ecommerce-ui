@@ -1,7 +1,7 @@
 // src/pages/ProductDetailsPage.jsx
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom'; // useParams to get ID from URL
-import productsService from '../api/product'; // Your products API service
+import { useParams, Link } from 'react-router-dom'; 
+import productsService from '../api/product'; 
 import cartService from '../api/cart';
 
 const ProductDetailsPage = () => {
@@ -38,7 +38,7 @@ const ProductDetailsPage = () => {
     };
 
     fetchProduct();
-  }, [id]); // Re-fetch whenever the ID in the URL changes
+  }, [id]); 
 
   const handleQuantityChange = (e) => {
     const value = parseInt(e.target.value, 10);
@@ -54,11 +54,6 @@ const ProductDetailsPage = () => {
 
   const handleAddToCart = async() => {
     if (product && quantity > 0 && quantity <= product.stock) {
-      // --- IMPORTANT: Implement actual Add to Cart logic here ---
-      // In a real app, you'd call a cartService or a Redux/Context action:
-      // cartService.addCartItem({ productId: product.id, quantity: quantity });
-      // Or dispatch({ type: 'ADD_TO_CART', payload: { product, quantity } });
-
       console.log(`Adding ${quantity} of "${product.title}" (ID: ${product.id}) to cart.`);
       alert(`Added ${quantity} of "${product.title}" to cart! (This is a placeholder)`);
       const response = await cartService.addCartItem({product_id: id, quantity: quantity})
@@ -70,6 +65,18 @@ const ProductDetailsPage = () => {
       alert("Please select a valid quantity.");
     }
   };
+
+  const handleDirectCheckout = async () => {
+    try {
+      const response = await cartService.directCheckout({product_id: id, quantity: quantity})
+      console.log(response);
+      alert(`Direct checkout initiated for ${quantity} of "${product.title}"!`,response);
+      
+    } catch (error) {
+      console.error('Direct checkout failed:', error);
+      alert('Failed to initiate direct checkout. Please try again later.');
+    }
+  }
 
   // --- Loading, Error, Not Found States ---
   if (loading) {
@@ -164,6 +171,16 @@ const ProductDetailsPage = () => {
               "
             >
               {product.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
+            </button>
+             <button
+              onClick={handleDirectCheckout}
+              className="
+                flex-grow bg-green-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg
+                focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+                transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed
+              "
+            >
+              Buy Now
             </button>
           </div>
         </div>

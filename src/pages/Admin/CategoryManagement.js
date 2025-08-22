@@ -21,7 +21,7 @@ const CategoryManagement = () => {
       setCategories(data);
     } catch (err) {
       console.error("Error fetching categories:", err);
-      setError("Failed to load categories. Please try again.");
+      // setError("Failed to load categories. Please try again.");
     } finally {
       setIsLoading(false);
     }

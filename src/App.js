@@ -7,6 +7,9 @@ import ProductDetailsPage from "./pages/ProductDetailsPage";
 import CartPage from "./pages/CartPage";
 import SellerDashboardPage from "./pages/SellerDashboardPage";
 import AdminDashboardPage from "./pages/Admin/AdminDashboardPage";
+import CheckoutPage from "./pages/CheckoutPage";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
 const ProtectedRoute = ({ children, requiredRole = null }) => {
   const authToken = localStorage.getItem('authToken');
@@ -29,7 +32,7 @@ const ProtectedRoute = ({ children, requiredRole = null }) => {
 
   return children;
 };
-
+const stripePromise = loadStripe('pk_test_51RraVG49xz7o1ilI0FRJnvOt664QUt4bNbcsVSWmzt0FYDDivX51z5VM9Yz1k6s3qVMfqrGMB3vA2639a04NPdfe0091vTZ7tW');
 function App() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -42,6 +45,14 @@ function App() {
           <Route path="/products/:id" element={<ProductDetailsPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route
+            path="/checkout"
+            element={
+                <Elements stripe={stripePromise}>
+                  <CheckoutPage />
+                </Elements>
+              }
+          />
           <Route
             path="/customer/cart"
             element={
