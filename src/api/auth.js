@@ -16,6 +16,17 @@ const authService = {
   register: async (userData) => {
     const response = await api.post('/register', userData);
     // You might also get a token here or require login after registration
+    // if (response.data && response.data.token) {
+    //   localStorage.setItem('authToken', response.data.token);
+    //   localStorage.setItem('user',JSON.stringify(response.data.user))
+    // }
+    return response.data;
+  },
+
+  verifyEmail: async (verifyUserData) => {
+    console.log("verifyUserData in authService:", verifyUserData);
+    const response = await api.post('/verify_email', verifyUserData);
+    // Handle token storage if verification returns a token
     if (response.data && response.data.token) {
       localStorage.setItem('authToken', response.data.token);
       localStorage.setItem('user',JSON.stringify(response.data.user))
