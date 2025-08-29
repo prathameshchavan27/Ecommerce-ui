@@ -213,8 +213,10 @@ const RegisterPage = () => {
         },
       });
 
-      console.log('Registration successful:', response);
-      setSuccess('Registration successful! You can now log in.');
+      console.log("Registration successful:", response);
+      setSuccess("Registration successful! Please check your email for OTP.");
+
+      const tempEmail = email;
 
       setFormData({
         email: '',
@@ -223,9 +225,8 @@ const RegisterPage = () => {
         role: 'customer',
       });
 
-      setTimeout(() => {
-        navigate('/');
-      }, 2000);
+      // redirect to OTP verify page with email
+      navigate("/verify-email", { state: { tempEmail } });
     } catch (err) {
       console.error('Registration error:', err);
     } finally {
