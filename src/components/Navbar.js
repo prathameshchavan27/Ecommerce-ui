@@ -29,9 +29,12 @@ const Navbar = () => {
               <Link to="/customer/cart" className="text-gray-300 hover:text-white">
                 Cart
               </Link>
-                <Link to="/admin/dashboard" className="text-gray-300 hover:text-white">
-                    Admin
-                </Link>: ''
+              <Link to="/admin/dashboard" className="text-gray-300 hover:text-white">
+                  Admin
+              </Link>
+              <Link to="/profile" className="text-gray-300 hover:text-white">
+                {user ? user.name : ''}
+              </Link>
               <button
                 onClick={handleLogout}
                 className="bg-red-600 hover:bg-red-700 text-white font-semibold py-1 px-3 rounded text-sm"

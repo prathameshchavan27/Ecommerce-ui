@@ -11,6 +11,8 @@ import CheckoutPage from "./pages/CheckoutPage";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
+import ProfilePage from "./pages/ProfilePage";
+import OrderDetailsPage from "./pages/OrderDetailsPage";
 
 const ProtectedRoute = ({ children, requiredRole = null }) => {
   const authToken = localStorage.getItem('authToken');
@@ -47,6 +49,8 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/verify-email" element={<VerifyEmailPage />} />
+          <Route path="/profile" element={<ProfilePage/>}/>
+          <Route path="/orders/:id" element={<OrderDetailsPage />} />
           <Route
             path="/checkout"
             element={

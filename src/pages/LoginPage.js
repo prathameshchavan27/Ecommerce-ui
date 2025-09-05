@@ -22,6 +22,8 @@ const LoginPage = () => {
         navigate("/seller/dashboard");
       } else if (response.user.role === "customer") {
         navigate("/products"); // Or '/customer/dashboard'
+      }else if (response.user.role === "admin") {
+        navigate("/admin/dashboard");
       }
         // Redirect after login
     } catch (err) {
