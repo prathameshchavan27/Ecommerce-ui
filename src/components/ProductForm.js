@@ -11,6 +11,7 @@ const ProductForm = ({ initialData = {}, onSubmit, loading, error, isEditMode = 
     price: initialData?.price || '', // Add ?. here
     stock: initialData?.stock || '', // Add ?. here
     category_id: initialData?.category?.id || '',
+    image: null, // Add image field
   });
 
   const [categories, setCategories] = useState([]);
@@ -47,21 +48,35 @@ const ProductForm = ({ initialData = {}, onSubmit, loading, error, isEditMode = 
   }, [initialData]);
 
   const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [id]: value,
-    }));
+    const { name, value, type, files } = e.target;
+    if (type === 'file') {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: files && files.length > 0 ? files[0] : null,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    const dataToSubmit = {
-      ...formData,
-      price: parseFloat(formData.price),
-      stock: parseInt(formData.stock, 10),
-      category_id: formData.category_id ? parseInt(formData.category_id, 10) : null
-    };
+    const dataToSubmit = new FormData();
+    dataToSubmit.append('product[title]', formData.title);
+    dataToSubmit.append('product[description]', formData.description);
+    dataToSubmit.append('product[price]', String(formData.price));
+    dataToSubmit.append('product[stock]', String(formData.stock));
+    dataToSubmit.append('product[category_id]', String(formData.category_id));
+    if (formData.image) {
+      dataToSubmit.append('product[image]', formData.image);
+    }
+    // Debug: Log all FormData entries
+    for (let pair of dataToSubmit.entries()) {
+      console.log(pair[0] + ':', pair[1]);
+    }
     onSubmit(dataToSubmit);
   };
 
@@ -88,7 +103,7 @@ const ProductForm = ({ initialData = {}, onSubmit, loading, error, isEditMode = 
         </label>
         <input
           type="text"
-          id="title"
+          name="title"
           value={formData.title}
           onChange={handleChange}
           required
@@ -103,6 +118,7 @@ const ProductForm = ({ initialData = {}, onSubmit, loading, error, isEditMode = 
         <textarea
           id="description"
           rows="3"
+          name="description"
           value={formData.description}
           onChange={handleChange}
           required
@@ -117,7 +133,7 @@ const ProductForm = ({ initialData = {}, onSubmit, loading, error, isEditMode = 
           </label>
           <input
             type="number"
-            id="price"
+            name="price"
             value={formData.price}
             onChange={handleChange}
             required
@@ -132,7 +148,7 @@ const ProductForm = ({ initialData = {}, onSubmit, loading, error, isEditMode = 
           </label>
           <input
             type="number"
-            id="stock"
+            name="stock"
             value={formData.stock}
             onChange={handleChange}
             required
@@ -149,6 +165,7 @@ const ProductForm = ({ initialData = {}, onSubmit, loading, error, isEditMode = 
         </label>
         <select
           id="category_id"
+          name="category_id"
           value={formData.category_id}
           onChange={handleChange}
           required
@@ -161,6 +178,19 @@ const ProductForm = ({ initialData = {}, onSubmit, loading, error, isEditMode = 
             </option>
           ))}
         </select>
+      </div>
+
+      <div>
+        <label htmlFor="image" className="block text-sm font-medium text-gray-700">
+          Product Image
+        </label>
+        <input
+          type="file"
+          name="image"
+          accept="image/*"
+          onChange={handleChange}
+          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+        />
       </div>
 
       <div className="flex justify-end">
