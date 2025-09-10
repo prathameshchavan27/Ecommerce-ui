@@ -13,7 +13,6 @@ const CartPage = () => {
   const [loading, setLoading] = useState(false); // For future API calls
   const [error, setError] = useState(null); // For future API errors
   const [total, setTotal] = useState(0);
-  const [quantity, setQuantity] = useState(1);
 
   // Calculate subtotal whenever cartItems change
   const navigate = useNavigate();
