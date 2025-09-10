@@ -12,53 +12,39 @@ const CartPage = () => {
 
   const [loading, setLoading] = useState(false); // For future API calls
   const [error, setError] = useState(null); // For future API errors
-    const [total, setTotal] = useState(0);
+  const [total, setTotal] = useState(0);
+
   // Calculate subtotal whenever cartItems change
   const navigate = useNavigate();
 
   // --- Handlers for Quantity Change and Removal ---
-    useEffect(()=>{
-        const getCart = async () => {
-          try {
-            const response = await cartService.getCart();
-            setCart(response);
-            setTotal(parseFloat(response.total_price))
-            setLoading(false);
-          } catch (error) {
-            console.error('Error fetching cart:', error);
-            setError('Failed to load cart. Please try again later.');
-            setLoading(false);
-          }
+  useEffect(()=>{
+      const getCart = async () => {
+        try {
+          const response = await cartService.getCart();
+          setCart(response);
+          setTotal(parseFloat(response.total_price))
+          setLoading(false);
+        } catch (error) {
+          console.error('Error fetching cart:', error);
+          setError('Failed to load cart. Please try again later.');
+          setLoading(false);
         }
-        getCart();
-    },[loading]); 
+      }
+      getCart();
+  },[loading]); 
 
-//   const handleQuantityChange = (itemId, newQuantity) => {
-//     setCartItems((prevItems) =>
-//       prevItems.map((item) => {
-//         if (item.id === itemId) {
-//           const updatedQuantity = Math.max(1, Math.min(newQuantity, item.stock)); // Ensure quantity is valid
-//           return { ...item, quantity: updatedQuantity };
-//         }
-//         return item;
-//       })
-//     );
-//     // In a real app, you'd call cartService.updateCartItem(itemId, { quantity: newQuantity }) here
-//   };
-
-//   const handleRemoveItem = (itemId) => {
-//     if (window.confirm("Are you sure you want to remove this item from your cart?")) {
-//       setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
-//       // In a real app, you'd call cartService.deleteCartItem(itemId) here
-//     }
-//   };
-
-//   const handleClearCart = () => {
-//     if (window.confirm("Are you sure you want to clear your entire cart?")) {
-//       setCartItems([]);
-//       // In a real app, you'd call cartService.clearCart() here
-//     }
-//   };
+  const handleClearCart = async () => {
+    try{
+      const response = await cartService.clearCart();
+      alert(response.message)
+      setCart();
+      setTotal(0);
+      setLoading(true);
+    } catch (error) {
+      setError('Failed to clear cart. Please try again later.');
+    }
+  }
 
   const handleProceedToCheckout = () => {
     // --- IMPORTANT: Implement actual Checkout logic here ---
@@ -119,14 +105,14 @@ const CartPage = () => {
                   <Link to={`/products/${item.productId}`} className="flex-shrink-0">
                     <img
                       src={item.image || "https://via.placeholder.com/80x80.png?text=Product"}
-                      alt={item.title}
+                      alt={item.product_title}
                       className="w-20 h-20 object-cover rounded-md mr-4 border border-gray-200"
                     />
                   </Link>
                   <div className="flex-grow">
                     <Link to={`/products/${item.productId}`}>
                       <h3 className="text-lg font-semibold text-gray-800 hover:text-blue-600 transition-colors duration-150">
-                        {item.title}
+                        {item.product_title}
                       </h3>
                     </Link>
                     <p className="text-gray-600 text-sm">Price: ${parseFloat(item.price).toFixed(2)}</p>
@@ -146,7 +132,7 @@ const CartPage = () => {
                       min="1"
                       max={item.stock > 0 ? item.stock : 1} // Max 1 if stock is 0 to prevent issues, though disabled
                       value={item.quantity}
-                    //   onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value, 10))}
+                      // onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value, 10))}
                       className="w-20 p-2 border border-gray-300 rounded-md text-center text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
                       disabled={item.stock === 0} // Disable if out of stock
                     />
@@ -172,7 +158,7 @@ const CartPage = () => {
             </div>
             <div className="mt-6 text-right">
               <button
-                // onClick={handleClearCart}
+                onClick={handleClearCart}
                 className="text-blue-600 hover:text-blue-800 font-semibold transition-colors duration-200"
               >
                 Clear Cart

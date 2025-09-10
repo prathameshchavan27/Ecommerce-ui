@@ -117,10 +117,11 @@ const ProductDetailsPage = () => {
         <div className="md:w-1/2 flex justify-center items-center">
           {/* Placeholder image. Replace with actual product.image_url */}
           <img
-            src="https://via.placeholder.com/400x400.png?text=Product+Image"
+            src={product.image_url}
             alt={product.title}
-            className="rounded-lg shadow-md max-h-[500px] w-auto object-contain"
+            className="rounded-lg shadow-md w-full max-w-[500px] max-h-[500px] object-contain mx-auto"
           />
+
         </div>
 
         {/* Product Details Section */}
