@@ -20,7 +20,7 @@ const Navbar = () => {
         <Link to="/" className="text-white text-2xl font-bold">
           E-Commerce App
         </Link>
-        <div className="space-x-4">
+        <div className="flex items-center space-x-4">
           <Link to="/" className="text-gray-300 hover:text-white">
             Products
           </Link>
